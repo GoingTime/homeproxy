@@ -50,12 +50,14 @@ if (github_token) {
 }
 
 /* tun_gso was deprecated in sb 1.11 */
-if (!isEmpty(uci.get(uciconfig, uciinfra, 'tun_gso')))
+if (!isEmpty(uci.get(uciconfig, uciinfra, 'tun_gso'))){
 	uci.delete(uciconfig, uciinfra, 'tun_gso');
+}
 
 /* create migration section */
-if (!uci.get(uciconfig, ucimigration))
+if (!uci.get(uciconfig, ucimigration)){
 	uci.set(uciconfig, ucimigration, uciconfig);
+}
 
 /* delete old crontab command */
 const migration_crontab = uci.get(uciconfig, ucimigration, 'crontab');
@@ -65,19 +67,23 @@ if (!migration_crontab) {
 }
 
 /* log_level was introduced */
-if (isEmpty(uci.get(uciconfig, ucimain, 'log_level')))
+if (isEmpty(uci.get(uciconfig, ucimain, 'log_level'))){
 	uci.set(uciconfig, ucimain, 'log_level', 'warn');
+}
 
-if (isEmpty(uci.get(uciconfig, uciserver, 'log_level')))
+if (isEmpty(uci.get(uciconfig, uciserver, 'log_level'))){
 	uci.set(uciconfig, uciserver, 'log_level', 'warn');
+}
 
 /* empty value defaults to all ports now */
-if (uci.get(uciconfig, ucimain, 'routing_port') === 'all')
+if (uci.get(uciconfig, ucimain, 'routing_port') === 'all'){
 	uci.delete(uciconfig, ucimain, 'routing_port');
+}
 
 /* experimental section was removed */
-if (uci.get(uciconfig, 'experimental'))
+if (uci.get(uciconfig, 'experimental')){
 	uci.delete(uciconfig, 'experimental');
+}
 
 /* block-dns was removed from built-in dns servers */
 const default_dns_server = uci.get(uciconfig, ucidns, 'default_server');
